@@ -1,0 +1,8 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo
+echo Husky is running Git hooks 🐶
+echo --------------------------------
+npx pretty-quick --staged
+echo
