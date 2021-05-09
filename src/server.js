@@ -2,8 +2,8 @@ const dotenv = require("dotenv");
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
-
 const envCheck = require("./utils/envCheck");
+const { generateMongoURI, getEnvironment } = require("./utils/misc");
 
 // configure dotenv
 dotenv.config({ path: "./.env" });
@@ -15,17 +15,14 @@ envCheck();
 const app = express();
 
 // env
-const mongoURI = process.env[`MONGODB_${process.env.NODE_ENV}_URI`];
+const mongoURI = generateMongoURI();
 
 // init mongoose & start the server
 mongoose
   .connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
   .then(() => {
-    console.log(`\n✔️  Connected to ${process.env.NODE_ENV} database`);
-
-    app.listen(5000, () =>
-      console.log(`🤖  Server started in ${process.env.NODE_ENV} environtment\n`)
-    );
+    console.log(`\n✔️  Connected to ${getEnvironment()} database`);
+    app.listen(5000, () => console.log(`🤖  Server started in ${getEnvironment()} environtment\n`));
   })
   .catch(err => console.log(err));
 
